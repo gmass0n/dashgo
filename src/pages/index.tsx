@@ -22,7 +22,7 @@ const signInFormSchema = yup.object().shape({
   password: yup.string().required("Senha obrigatória"),
 });
 
-export const getServerSideProps = withSSRGuest(async (ctx) => {
+export const getServerSideProps = withSSRGuest(async () => {
   return {
     props: {},
   };

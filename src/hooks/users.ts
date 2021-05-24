@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "react-query";
 
-import { api } from "../services/api";
+import { apiClient } from "../services/api";
 
 export interface User {
   id: string;
@@ -15,7 +15,7 @@ export interface GetUsersResponse {
 }
 
 export async function getUsers(page: number): Promise<GetUsersResponse> {
-  const { data, headers } = await api.get("/users", { params: { page } });
+  const { data, headers } = await apiClient.get("/users", { params: { page } });
 
   const totalCount = Number(headers["x-total-count"]);
 
@@ -39,7 +39,7 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
 }
 
 export async function getUserById(id: string): Promise<User> {
-  const response = await api.get(`/users/${id}`);
+  const response = await apiClient.get(`/users/${id}`);
 
   return response.data;
 }
@@ -47,7 +47,7 @@ export async function getUserById(id: string): Promise<User> {
 export async function createUser(
   data: Omit<User, "id" | "createdAt">
 ): Promise<User> {
-  const response = await api.post("/users", {
+  const response = await apiClient.post("/users", {
     user: {
       ...data,
       createdAt: new Date(),

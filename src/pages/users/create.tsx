@@ -25,6 +25,8 @@ import { queryClient } from "../../services/queryClient";
 
 import { createUser } from "../../hooks/users";
 
+import { withSSRAuth } from "../../utils/withSSRAuth";
+
 interface CreateUserFormData {
   name: string;
   email: string;
@@ -42,6 +44,12 @@ const createUserFormSchema = yup.object().shape({
   passwordConfirmation: yup
     .string()
     .oneOf([null, yup.ref("password")], "As senhas precisam ser iguais"),
+});
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
 });
 
 const CreateUser: NextPage = () => {

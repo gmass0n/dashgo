@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 
+import { withSSRAuth } from "../utils/withSSRAuth";
+
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const options = {
@@ -62,6 +64,12 @@ const series = [
     data: [31, 120, 10, 28, 61, 18, 109],
   },
 ];
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});
 
 const Dashboard: NextPage = () => {
   return (

@@ -29,6 +29,14 @@ import { useUsers, getUserById } from "../../hooks/users";
 
 import { queryClient } from "../../services/queryClient";
 
+import { withSSRAuth } from "../../utils/withSSRAuth";
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {},
+  };
+});
+
 const UsersList: NextPage = () => {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 

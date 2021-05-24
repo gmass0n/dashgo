@@ -10,7 +10,7 @@ import {
 } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 
-import { api } from "../services/api";
+import { apiClient } from "../services/api";
 
 interface SignInCredentials {
   email: string;
@@ -51,7 +51,7 @@ const AuthProvider: FC = ({ children }) => {
 
       if (token) {
         try {
-          const response = await api.get("/me");
+          const response = await apiClient.get("/me");
 
           const { name, avatar, email, permissions, roles } = response.data;
 
@@ -65,7 +65,7 @@ const AuthProvider: FC = ({ children }) => {
 
   const signIn = useCallback(async (credentials: SignInCredentials) => {
     try {
-      const response = await api.post("/sessions", credentials);
+      const response = await apiClient.post("/sessions", credentials);
 
       const { permissions, roles, name, avatar, token, refreshToken } =
         response.data;
@@ -75,7 +75,7 @@ const AuthProvider: FC = ({ children }) => {
         path: "/",
       });
 
-      api.defaults.headers.Authorization = `Bearer ${token}`;
+      apiClient.defaults.headers.Authorization = `Bearer ${token}`;
 
       setCookie(undefined, "dashgo.refresh-token", refreshToken, {
         maxAge: 60 * 60 * 24 * 7,
