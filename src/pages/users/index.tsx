@@ -18,6 +18,7 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 import { Header } from "../../components/Header";
 import { SideBar } from "../../components/SideBar";
+import { Pagination } from "../../components/Pagination";
 
 const UsersList: NextPage = () => {
   return (
@@ -88,6 +89,8 @@ const UsersList: NextPage = () => {
               </Tr>
             </Tbody>
           </Table>
+
+          <Pagination />
         </Box>
       </Flex>
     </Box>
