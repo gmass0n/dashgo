@@ -66,6 +66,8 @@ const AuthProvider: FC = ({ children }) => {
         path: "/",
       });
 
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+
       setCookie(undefined, "dashgo.refresh-token", refreshToken, {
         maxAge: 60 * 60 * 24 * 7,
         path: "/",
