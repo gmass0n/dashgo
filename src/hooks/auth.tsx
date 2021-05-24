@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Router from "next/router";
 import {
   createContext,
   FC,
@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { setCookie, parseCookies } from "nookies";
+import { setCookie, parseCookies, destroyCookie } from "nookies";
 
 import { api } from "../services/api";
 
@@ -33,9 +33,14 @@ interface IAuthContextData {
 
 const AuthContext = createContext({} as IAuthContextData);
 
-const AuthProvider: FC = ({ children }) => {
-  const router = useRouter();
+export function signOut(): void {
+  destroyCookie(undefined, "dashgo.token");
+  destroyCookie(undefined, "dashgo.refresh-token");
 
+  Router.push("/");
+}
+
+const AuthProvider: FC = ({ children }) => {
   const [user, setUser] = useState({} as User);
 
   const isAuthenticated = useMemo(() => !!user, [user]);
@@ -45,11 +50,15 @@ const AuthProvider: FC = ({ children }) => {
       const { "dashgo.token": token } = parseCookies();
 
       if (token) {
-        const response = await api.get("/me");
+        try {
+          const response = await api.get("/me");
 
-        const { name, avatar, email, permissions, roles } = response.data;
+          const { name, avatar, email, permissions, roles } = response.data;
 
-        setUser({ name, avatar, email, permissions, roles });
+          setUser({ name, avatar, email, permissions, roles });
+        } catch {
+          signOut();
+        }
       }
     })();
   }, []);
@@ -81,7 +90,7 @@ const AuthProvider: FC = ({ children }) => {
         avatar,
       });
 
-      router.push("/dashboard");
+      Router.push("/dashboard");
     } catch (error) {
       console.log(error);
     }
