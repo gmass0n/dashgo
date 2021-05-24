@@ -7,7 +7,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "../components/Form/Input";
 import { Logo } from "../components/Logo";
+
 import { useAuth } from "../hooks/auth";
+
+import { withSSRGuest } from "../utils/withSSRGuest";
 
 interface SigninFormData {
   email: string;
@@ -17,6 +20,12 @@ interface SigninFormData {
 const signInFormSchema = yup.object().shape({
   email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
   password: yup.string().required("Senha obrigatória"),
+});
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {},
+  };
 });
 
 const SignIn: NextPage = () => {
