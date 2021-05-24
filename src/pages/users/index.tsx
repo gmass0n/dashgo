@@ -30,6 +30,11 @@ import { useUsers, getUserById } from "../../hooks/users";
 import { queryClient } from "../../services/queryClient";
 
 import { withSSRAuth } from "../../utils/withSSRAuth";
+import { validateUserPermissions } from "../../utils/validateUserPermissions";
+
+import { useAuth } from "../../hooks/auth";
+
+import { CREATE_USER, LIST_USERS } from "../../constants/permissions";
 
 export const getServerSideProps = withSSRAuth(
   async () => {
@@ -38,11 +43,18 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: ["users.list"],
+    permissions: [LIST_USERS],
   }
 );
 
 const UsersList: NextPage = () => {
+  const { user } = useAuth();
+
+  const userHasPermissionToCreateUser = validateUserPermissions({
+    user,
+    permissions: [CREATE_USER],
+  });
+
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,17 +85,19 @@ const UsersList: NextPage = () => {
               )}
             </Heading>
 
-            <Link href="/users/create" passHref>
-              <Button
-                as="a"
-                size="sm"
-                fontSize="sm"
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-              >
-                Criar novo usuário
-              </Button>
-            </Link>
+            {userHasPermissionToCreateUser && (
+              <Link href="/users/create" passHref>
+                <Button
+                  as="a"
+                  size="sm"
+                  fontSize="sm"
+                  colorScheme="pink"
+                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                >
+                  Criar novo usuário
+                </Button>
+              </Link>
+            )}
           </Flex>
 
           {isLoading ? (

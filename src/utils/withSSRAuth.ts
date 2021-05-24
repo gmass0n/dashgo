@@ -12,11 +12,9 @@ import { validateUserPermissions } from "./validateUserPermissions";
 
 interface DecodedUser {
   permissions: string[];
-  roles: string[];
 }
 interface WithSSRAuthOptions {
   permissions?: string[];
-  roles?: string[];
 }
 
 export function withSSRAuth<P = any>(
@@ -40,12 +38,11 @@ export function withSSRAuth<P = any>(
 
     if (options) {
       const user = decode<DecodedUser>(token);
-      const { permissions, roles } = options;
+      const { permissions } = options;
 
       const userHasValidPermissions = validateUserPermissions({
         user,
         permissions,
-        roles,
       });
 
       if (!userHasValidPermissions) {

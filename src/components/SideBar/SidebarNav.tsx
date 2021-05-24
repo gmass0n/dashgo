@@ -6,6 +6,8 @@ import {
   RiInputMethodLine,
 } from "react-icons/ri";
 
+import { LIST_USERS } from "../../constants/permissions";
+
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
 
@@ -17,7 +19,7 @@ export const SidebarNav: React.FC = () => {
           Dashboard
         </NavLink>
 
-        <NavLink href="/users" icon={RiContactsLine}>
+        <NavLink href="/users" icon={RiContactsLine} permissions={[LIST_USERS]}>
           Usuários
         </NavLink>
       </NavSection>

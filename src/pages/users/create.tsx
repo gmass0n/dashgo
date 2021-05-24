@@ -26,6 +26,7 @@ import { queryClient } from "../../services/queryClient";
 import { createUser } from "../../hooks/users";
 
 import { withSSRAuth } from "../../utils/withSSRAuth";
+import { CREATE_USER } from "../../constants/permissions";
 
 interface CreateUserFormData {
   name: string;
@@ -53,7 +54,7 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: ["users.create"],
+    permissions: [CREATE_USER],
   }
 );
 
