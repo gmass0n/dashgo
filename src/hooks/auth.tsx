@@ -7,6 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { setCookie } from "nookies";
 
 import { api } from "../services/api";
 
@@ -42,7 +43,18 @@ const AuthProvider: FC = ({ children }) => {
     try {
       const response = await api.post("/sessions", credentials);
 
-      const { permissions, roles, name, avatar } = response.data;
+      const { permissions, roles, name, avatar, token, refreshToken } =
+        response.data;
+
+      setCookie(undefined, "dashgo.token", token, {
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+
+      setCookie(undefined, "dashgo.refresh-token", refreshToken, {
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
 
       setUser({
         email: credentials.email,
