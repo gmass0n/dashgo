@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "../components/Form/Input";
 import { Logo } from "../components/Logo";
+import { useAuth } from "../hooks/auth";
 
 interface SigninFormData {
   email: string;
@@ -19,15 +20,15 @@ const signInFormSchema = yup.object().shape({
 });
 
 const SignIn: NextPage = () => {
+  const { signIn } = useAuth();
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInFormSchema),
   });
 
   const handleSignIn: SubmitHandler<SigninFormData> = useCallback(
     async (values) => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      console.log(values);
+      await signIn(values);
     },
     []
   );
