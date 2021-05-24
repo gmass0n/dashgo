@@ -1,4 +1,6 @@
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 import Link from "next/link";
 import {
   Box,
@@ -13,11 +15,14 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "react-query";
 
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { Input } from "../../components/Form/Input";
-import { useCallback } from "react";
+
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
 
 interface CreateUserFormData {
   name: string;
@@ -39,15 +44,34 @@ const createUserFormSchema = yup.object().shape({
 });
 
 const CreateUser: NextPage = () => {
+  const router = useRouter();
+  const createUser = useMutation(
+    async (user: CreateUserFormData) => {
+      const response = await api.post("/users", {
+        user: {
+          ...user,
+          createdAt: new Date(),
+        },
+      });
+
+      return response.data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("users");
+      },
+    }
+  );
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
   });
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = useCallback(
     async (values) => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await createUser.mutateAsync(values);
 
-      console.log(values);
+      router.push("/users");
     },
     []
   );
