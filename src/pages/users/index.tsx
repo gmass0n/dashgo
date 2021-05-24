@@ -24,10 +24,14 @@ import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
 
 import { useUsers } from "../../services/hooks/useUsers";
+import { useState } from "react";
 
 const UsersList: NextPage = () => {
-  const { data, isLoading, isFetching, error } = useUsers();
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isFetching, error } = useUsers(currentPage);
 
   return (
     <Box>
@@ -80,7 +84,7 @@ const UsersList: NextPage = () => {
                 </Thead>
 
                 <Tbody>
-                  {data.map((user) => (
+                  {data.users.map((user) => (
                     <Tr key={user.id}>
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
@@ -103,9 +107,9 @@ const UsersList: NextPage = () => {
               </Table>
 
               <Pagination
-                totalCountOfRegisters={200}
-                currentPage={5}
-                onPageChange={() => {}}
+                totalCountOfRegisters={data.totalCount}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
               />
             </>
           )}
