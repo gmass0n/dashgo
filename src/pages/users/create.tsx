@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import Link from "next/link";
 import {
   Box,
   Button,
@@ -57,9 +58,11 @@ const CreateUser: NextPage = () => {
 
           <Flex mt={["6", "6", "8"]} justify="flex-end">
             <HStack spacing="4">
-              <Button colorScheme="whiteAlpha" size="sm">
-                Cancelar
-              </Button>
+              <Link href="/users">
+                <Button colorScheme="whiteAlpha" size="sm">
+                  Cancelar
+                </Button>
+              </Link>
 
               <Button colorScheme="pink" size="sm">
                 Salvar
