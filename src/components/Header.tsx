@@ -5,9 +5,7 @@ import {
   RiUserAddLine,
 } from "react-icons/ri";
 
-interface HeaderProps {}
-
-export const Header: React.FC<HeaderProps> = () => {
+export const Header: React.FC = () => {
   return (
     <Flex
       as="header"
