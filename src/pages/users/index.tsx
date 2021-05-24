@@ -25,9 +25,9 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
 
-import { useUsers } from "../../services/hooks/useUsers";
+import { useUsers, getUserById } from "../../hooks/users";
+
 import { queryClient } from "../../services/queryClient";
-import { api } from "../../services/api";
 
 const UsersList: NextPage = () => {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
@@ -39,10 +39,7 @@ const UsersList: NextPage = () => {
   const handlePrefetchUser = useCallback(async (userId: string) => {
     await queryClient.prefetchQuery(
       ["user", userId],
-      async () => {
-        const response = await api.get(`/users/${userId}`);
-        return response.data;
-      },
+      () => getUserById(userId),
       { staleTime: 1000 * 60 * 2 }
     );
   }, []);

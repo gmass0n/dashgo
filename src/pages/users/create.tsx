@@ -21,8 +21,9 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/Sidebar";
 import { Input } from "../../components/Form/Input";
 
-import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
+
+import { createUser } from "../../hooks/users";
 
 interface CreateUserFormData {
   name: string;
@@ -45,23 +46,11 @@ const createUserFormSchema = yup.object().shape({
 
 const CreateUser: NextPage = () => {
   const router = useRouter();
-  const createUser = useMutation(
-    async (user: CreateUserFormData) => {
-      const response = await api.post("/users", {
-        user: {
-          ...user,
-          createdAt: new Date(),
-        },
-      });
-
-      return response.data;
+  const { mutateAsync } = useMutation(createUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("users");
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("users");
-      },
-    }
-  );
+  });
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
@@ -69,7 +58,7 @@ const CreateUser: NextPage = () => {
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = useCallback(
     async (values) => {
-      await createUser.mutateAsync(values);
+      await mutateAsync(values);
 
       router.push("/users");
     },
