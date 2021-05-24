@@ -71,7 +71,7 @@ const SignIn: NextPage = () => {
         h="100vh"
         align="center"
         direction="column"
-        justify="center"
+        justify={["flex-end", "center"]}
         position="absolute"
         zIndex={10}
       >
