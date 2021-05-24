@@ -1,5 +1,6 @@
 import { Flex, useBreakpointValue, IconButton, Icon } from "@chakra-ui/react";
 import { RiMenuLine } from "react-icons/ri";
+import Link from "next/link";
 
 import { useSidebarDrawer } from "../../hooks/sidebarDrawer";
 import { useAuth } from "../../hooks/auth";
@@ -37,7 +38,9 @@ export const Header: React.FC = () => {
         />
       )}
 
-      <Logo w="64" />
+      <Link href="/dashboard" passHref>
+        <Logo w="64" as="a" transition="all 0.4s" _hover={{ opacity: 0.7 }} />
+      </Link>
 
       {isWideVersion && <SearchBox />}
 
