@@ -141,8 +141,10 @@ const CreateUser: NextPage = () => {
 
           <Flex mt={["6", "6", "8"]} justify="flex-end">
             <HStack spacing="4">
-              <Link href="/users">
-                <Button colorScheme="whiteAlpha">Cancelar</Button>
+              <Link href="/users" passHref>
+                <Button as="a" colorScheme="whiteAlpha">
+                  Cancelar
+                </Button>
               </Link>
 
               <Button
