@@ -31,11 +31,16 @@ import { queryClient } from "../../services/queryClient";
 
 import { withSSRAuth } from "../../utils/withSSRAuth";
 
-export const getServerSideProps = withSSRAuth(async () => {
-  return {
-    props: {},
-  };
-});
+export const getServerSideProps = withSSRAuth(
+  async () => {
+    return {
+      props: {},
+    };
+  },
+  {
+    permissions: ["users.list"],
+  }
+);
 
 const UsersList: NextPage = () => {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });

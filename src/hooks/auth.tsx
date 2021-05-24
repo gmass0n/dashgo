@@ -17,7 +17,7 @@ interface SignInCredentials {
   password: string;
 }
 
-interface User {
+export interface User {
   email: string;
   name: string;
   avatar?: string;

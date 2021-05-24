@@ -46,11 +46,16 @@ const createUserFormSchema = yup.object().shape({
     .oneOf([null, yup.ref("password")], "As senhas precisam ser iguais"),
 });
 
-export const getServerSideProps = withSSRAuth(async () => {
-  return {
-    props: {},
-  };
-});
+export const getServerSideProps = withSSRAuth(
+  async () => {
+    return {
+      props: {},
+    };
+  },
+  {
+    permissions: ["users.create"],
+  }
+);
 
 const CreateUser: NextPage = () => {
   const router = useRouter();
