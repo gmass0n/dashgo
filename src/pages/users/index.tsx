@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import { NextPage } from "next";
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   Text,
   useBreakpointValue,
   Spinner,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { RiAddLine } from "react-icons/ri";
@@ -24,7 +26,8 @@ import { Sidebar } from "../../components/Sidebar";
 import { Pagination } from "../../components/Pagination";
 
 import { useUsers } from "../../services/hooks/useUsers";
-import { useState } from "react";
+import { queryClient } from "../../services/queryClient";
+import { api } from "../../services/api";
 
 const UsersList: NextPage = () => {
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
@@ -32,6 +35,17 @@ const UsersList: NextPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFetching, error } = useUsers(currentPage);
+
+  const handlePrefetchUser = useCallback(async (userId: string) => {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`/users/${userId}`);
+        return response.data;
+      },
+      { staleTime: 1000 * 60 * 2 }
+    );
+  }, []);
 
   return (
     <Box>
@@ -92,7 +106,12 @@ const UsersList: NextPage = () => {
 
                       <Td>
                         <Box>
-                          <Text fontWeight="bold">{user.name}</Text>
+                          <ChakraLink
+                            color="purple.400"
+                            onMouseEnter={() => handlePrefetchUser(user.id)}
+                          >
+                            <Text fontWeight="bold">{user.name}</Text>
+                          </ChakraLink>
 
                           <Text fontSize="sm" color="gray.300">
                             {user.email}
