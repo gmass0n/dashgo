@@ -23,7 +23,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   currentPage = 1,
   registersPerPage = 10,
 }) => {
-  const lastPage = Math.floor(totalCountOfRegisters / registersPerPage);
+  const lastPage = Math.round(totalCountOfRegisters / registersPerPage);
 
   const previousPages =
     currentPage > 1
@@ -47,7 +47,12 @@ export const Pagination: React.FC<PaginationProps> = ({
       align="center"
     >
       <Box>
-        <strong>0</strong> - <strong>10</strong> de <strong>100</strong>
+        <strong>{Math.round(registersPerPage * (currentPage - 1) + 1)}</strong>{" "}
+        -{" "}
+        <strong>
+          {Math.round((totalCountOfRegisters / registersPerPage) * currentPage)}
+        </strong>{" "}
+        de <strong>{totalCountOfRegisters}</strong>
       </Box>
 
       <HStack spacing="2">
