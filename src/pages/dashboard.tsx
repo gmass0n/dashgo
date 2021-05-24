@@ -4,7 +4,7 @@ import { ApexOptions } from "apexcharts";
 import dynamic from "next/dynamic";
 
 import { Header } from "../components/Header";
-import { SideBar } from "../components/SideBar";
+import { Sidebar } from "../components/Sidebar";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -69,7 +69,7 @@ const Dashboard: NextPage = () => {
       <Header />
 
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <SideBar />
+        <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align="flex-start">
           <Box p="8" pb="4" mb="auto" bg="gray.800" borderRadius={8}>
