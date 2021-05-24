@@ -33,9 +33,13 @@ interface IAuthContextData {
 
 const AuthContext = createContext({} as IAuthContextData);
 
+let authChannel: BroadcastChannel;
+
 export function signOut(): void {
   destroyCookie(undefined, "dashgo.token");
   destroyCookie(undefined, "dashgo.refresh-token");
+
+  authChannel.postMessage("signOut");
 
   Router.push("/");
 }
@@ -44,6 +48,21 @@ const AuthProvider: FC = ({ children }) => {
   const [user, setUser] = useState({} as User);
 
   const isAuthenticated = useMemo(() => !!user, [user]);
+
+  useEffect(() => {
+    authChannel = new BroadcastChannel("dashgo:auth");
+
+    authChannel.onmessage = (message) => {
+      switch (message.data) {
+        case "signOut":
+          signOut();
+          break;
+
+        default:
+          break;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {
