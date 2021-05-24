@@ -4,10 +4,11 @@ import {
   FC,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
-import { setCookie } from "nookies";
+import { setCookie, parseCookies } from "nookies";
 
 import { api } from "../services/api";
 
@@ -35,9 +36,23 @@ const AuthContext = createContext({} as IAuthContextData);
 const AuthProvider: FC = ({ children }) => {
   const router = useRouter();
 
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState({} as User);
 
   const isAuthenticated = useMemo(() => !!user, [user]);
+
+  useEffect(() => {
+    (async () => {
+      const { "dashgo.token": token } = parseCookies();
+
+      if (token) {
+        const response = await api.get("/me");
+
+        const { name, avatar, email, permissions, roles } = response.data;
+
+        setUser({ name, avatar, email, permissions, roles });
+      }
+    })();
+  }, []);
 
   const signIn = useCallback(async (credentials: SignInCredentials) => {
     try {
