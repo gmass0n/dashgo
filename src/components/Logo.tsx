@@ -1,12 +1,14 @@
-import { Text } from "@chakra-ui/react";
+import { Text, TextProps as ChakraTextProps } from "@chakra-ui/react";
 
-export const Logo: React.FC = () => {
+type LogoProps = ChakraTextProps;
+
+export const Logo: React.FC<LogoProps> = ({ ...props }) => {
   return (
     <Text
       fontSize={["2xl", "3xl"]}
       fontWeight="bold"
       letterSpacing="tight"
-      w="64"
+      {...props}
     >
       dashgo
       <Text as="span" ml="1" color="pink.500">

@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { Input } from "../components/Form/Input";
+import { Logo } from "../components/Logo";
 
 interface SigninFormData {
   email: string;
@@ -32,10 +33,19 @@ const SignIn: NextPage = () => {
   );
 
   return (
-    <Flex w="100vw" h="100vh" align="center" justify="center">
+    <Flex
+      w="100vw"
+      h="100vh"
+      align="center"
+      direction="column"
+      justify="center"
+    >
+      <Logo fontSize="5xl" />
+
       <Flex
         as="form"
         w="100%"
+        mt="8"
         maxWidth={360}
         bg="gray.800"
         p="8"

@@ -6,7 +6,7 @@ import { useSidebarDrawer } from "../../hooks/sidebarDrawer";
 import { Profile } from "./Profile";
 import { SearchBox } from "./SearchBox";
 import { NotificationsNav } from "./NotificationsNav";
-import { Logo } from "./Logo";
+import { Logo } from "../Logo";
 
 export const Header: React.FC = () => {
   const { onOpen } = useSidebarDrawer();
@@ -35,7 +35,7 @@ export const Header: React.FC = () => {
         ></IconButton>
       )}
 
-      <Logo />
+      <Logo w="64" />
 
       {isWideVersion && <SearchBox />}
 
