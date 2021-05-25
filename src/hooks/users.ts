@@ -15,7 +15,9 @@ export interface GetUsersResponse {
 }
 
 export async function getUsers(page: number): Promise<GetUsersResponse> {
-  const { data, headers } = await apiClient.get("/users", { params: { page } });
+  const { data, headers, ...props } = await apiClient.get("/users", {
+    params: { page },
+  });
 
   const totalCount = Number(headers["x-total-count"]);
 
@@ -38,8 +40,8 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
   };
 }
 
-export async function getUserById(id: string): Promise<User> {
-  const response = await apiClient.get(`/users/${id}`);
+export async function getUserByEmail(email: string): Promise<User> {
+  const response = await apiClient.get(`/users/${email}`);
 
   return response.data;
 }
@@ -48,10 +50,8 @@ export async function createUser(
   data: Omit<User, "id" | "createdAt">
 ): Promise<User> {
   const response = await apiClient.post("/users", {
-    user: {
-      ...data,
-      createdAt: new Date(),
-    },
+    ...data,
+    createdAt: new Date(),
   });
 
   return response.data;
