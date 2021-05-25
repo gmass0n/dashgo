@@ -43,7 +43,7 @@ export async function getRoleByName(name: string): Promise<Role> {
   return response.data;
 }
 
-export async function createUser(
+export async function createRole(
   data: Omit<Role, "id" | "createdAt">
 ): Promise<Role> {
   const response = await apiClient.post("/roles", {

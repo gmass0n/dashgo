@@ -119,6 +119,7 @@ const UsersList: NextPage = () => {
                       <Checkbox colorScheme="pink" />
                     </Th>
                     <Th>Usuário</Th>
+                    <Th>Grupo de permissão</Th>
                     {isWideVersion && <Th>Data de cadastro</Th>}
                   </Tr>
                 </Thead>
@@ -141,6 +142,16 @@ const UsersList: NextPage = () => {
 
                           <Text fontSize="sm" color="gray.300">
                             {user.email}
+                          </Text>
+                        </Box>
+                      </Td>
+
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold">{user.role}</Text>
+
+                          <Text fontSize="sm" color="gray.300">
+                            {user.permissions.length} permissões
                           </Text>
                         </Box>
                       </Td>

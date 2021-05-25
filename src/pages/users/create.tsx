@@ -27,16 +27,20 @@ import { createUser } from "../../hooks/users";
 
 import { withSSRAuth } from "../../utils/withSSRAuth";
 import { CREATE_USER } from "../../constants/permissions";
+import { Select } from "../../components/Form/Select";
+import { useRoles } from "../../hooks/roles";
 
 interface CreateUserFormData {
   name: string;
   email: string;
   password: string;
   passwordConfirmation: string;
+  role: string;
 }
 
 const createUserFormSchema = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
+  role: yup.string().required("Grupo de permissão obrigatório"),
   email: yup.string().required("E-mail obrigatório").email("E-mail inválido"),
   password: yup
     .string()
@@ -65,6 +69,16 @@ const CreateUser: NextPage = () => {
       queryClient.invalidateQueries("users");
     },
   });
+
+  const { data, isLoading } = useRoles(1);
+
+  const roleOptions =
+    !isLoading && data.roles
+      ? data.roles.map((role) => ({
+          label: role.name,
+          value: role.name,
+        }))
+      : [];
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
@@ -121,6 +135,15 @@ const CreateUser: NextPage = () => {
                 {...register("email")}
               />
             </SimpleGrid>
+
+            <Select
+              name="role"
+              isDisabled={isLoading}
+              label="Grupo de permissões"
+              error={formState.errors.role}
+              options={roleOptions}
+              {...register("role")}
+            />
 
             <SimpleGrid
               minChildWidth="240px"

@@ -5,7 +5,9 @@ import { apiClient } from "../services/api";
 export interface User {
   id: string;
   name: string;
+  role: string;
   email: string;
+  permissions: string[];
   createdAt: string;
 }
 
@@ -23,9 +25,7 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
 
   const users = data.users.map((user) => {
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      ...user,
       createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "long",
@@ -47,7 +47,7 @@ export async function getUserByEmail(email: string): Promise<User> {
 }
 
 export async function createUser(
-  data: Omit<User, "id" | "createdAt">
+  data: Omit<User, "id" | "createdAt" | "permissions">
 ): Promise<User> {
   const response = await apiClient.post("/users", {
     ...data,
