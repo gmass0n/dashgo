@@ -1,5 +1,5 @@
 import { HStack } from "@chakra-ui/react";
-import { RiLogoutBoxLine, RiNotificationLine } from "react-icons/ri";
+import { RiLogoutBoxLine } from "react-icons/ri";
 
 import { signOut } from "../../hooks/auth";
 
@@ -16,11 +16,11 @@ export const NotificationsNav: React.FC = () => {
       borderRightWidth={1}
       borderColor="gray.700"
     >
-      <NotificationsNavButton
+      {/* <NotificationsNavButton
         label="Notificações"
         aria-label="Show notifications"
         icon={RiNotificationLine}
-      />
+      /> */}
 
       <NotificationsNavButton
         label="Sair"
