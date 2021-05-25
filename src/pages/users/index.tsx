@@ -34,7 +34,7 @@ import { validateUserPermissions } from "../../utils/validateUserPermissions";
 
 import { useAuth } from "../../hooks/auth";
 
-import { CREATE_USER, LIST_USERS } from "../../constants/permissions";
+import { permissions } from "../../constants/permissions";
 
 export const getServerSideProps = withSSRAuth(
   async () => {
@@ -43,7 +43,7 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: [LIST_USERS],
+    permissions: [permissions.users.list],
   }
 );
 
@@ -52,7 +52,7 @@ const UsersList: NextPage = () => {
 
   const userHasPermissionToCreateUser = validateUserPermissions({
     user,
-    permissions: [CREATE_USER],
+    permissions: [permissions.users.create],
   });
 
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
@@ -126,7 +126,7 @@ const UsersList: NextPage = () => {
 
                 <Tbody>
                   {data.users.map((user) => (
-                    <Tr key={user.id}>
+                    <Tr key={user.email}>
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
                       </Td>

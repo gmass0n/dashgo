@@ -38,8 +38,10 @@ export const Header: React.FC = () => {
         />
       )}
 
-      <Link href="/dashboard" passHref>
-        <Logo w="64" as="a" transition="all 0.4s" _hover={{ opacity: 0.7 }} />
+      <Link href="/dashboard">
+        <a>
+          <Logo w="64" transition="all 0.4s" _hover={{ opacity: 0.7 }} />
+        </a>
       </Link>
 
       {isWideVersion && <SearchBox />}

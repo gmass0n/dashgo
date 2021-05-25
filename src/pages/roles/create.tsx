@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   Flex,
   Heading,
   HStack,
-  SimpleGrid,
   VStack,
 } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -26,8 +25,8 @@ import { queryClient } from "../../services/queryClient";
 import { createRole } from "../../hooks/roles";
 
 import { withSSRAuth } from "../../utils/withSSRAuth";
-import { CREATE_ROLE } from "../../constants/permissions";
-import { Select } from "../../components/Form/Select";
+import { permissions } from "../../constants/permissions";
+import { PermissionsSelector } from "../../components/PermissionsSelector";
 
 interface CreateRoleFormData {
   name: string;
@@ -36,10 +35,6 @@ interface CreateRoleFormData {
 
 const createRoleFormData = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
-  roles: yup
-    .array()
-    .required("Permissões obrigatória")
-    .min(1, "No mínimo 1 permissão"),
 });
 
 export const getServerSideProps = withSSRAuth(
@@ -49,7 +44,7 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: [CREATE_ROLE],
+    permissions: [permissions.roles.create],
   }
 );
 
@@ -61,17 +56,33 @@ const CreateUser: NextPage = () => {
     },
   });
 
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createRoleFormData),
   });
 
+  const togglePermission = useCallback((permissions: string[]) => {
+    permissions.forEach((permission) => {
+      setSelectedPermissions((prevState) => {
+        const findPermission = prevState.find((item) => item === permission);
+
+        if (findPermission) {
+          return prevState.filter((item) => item !== permission);
+        }
+
+        return [...prevState, permission];
+      });
+    });
+  }, []);
+
   const handleCreateRole: SubmitHandler<CreateRoleFormData> = useCallback(
     async (values) => {
-      await mutateAsync(values);
+      await mutateAsync({ ...values, permissions: selectedPermissions });
 
       router.push("/roles");
     },
-    []
+    [selectedPermissions]
   );
 
   return (
@@ -103,12 +114,9 @@ const CreateUser: NextPage = () => {
               {...register("name")}
             />
 
-            <Select
-              name="permission"
-              label="Permissão"
-              error={formState.errors.permissions}
-              options={[{ label: "oi", value: "oi" }]}
-              {...register("permission")}
+            <PermissionsSelector
+              selecteds={selectedPermissions}
+              onToggle={togglePermission}
             />
           </VStack>
 

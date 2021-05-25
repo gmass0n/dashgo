@@ -1,7 +1,17 @@
-// USERS
-export const LIST_USERS = "users.list";
-export const CREATE_USER = "users.create";
+type PermissionValueKey = "list" | "create";
 
-// ROLES
-export const LIST_ROLES = "roles.list";
-export const CREATE_ROLE = "roles.create";
+export type PermissionName = "users" | "roles";
+type PermissionValue = Record<PermissionValueKey, string>;
+
+type Permissions = Record<PermissionName, PermissionValue>;
+
+export const permissions: Permissions = {
+  users: {
+    list: "users.list",
+    create: "users.create",
+  },
+  roles: {
+    list: "roles.list",
+    create: "roles.create",
+  },
+};

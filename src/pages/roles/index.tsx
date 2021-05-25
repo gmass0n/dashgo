@@ -34,7 +34,7 @@ import { validateUserPermissions } from "../../utils/validateUserPermissions";
 
 import { useAuth } from "../../hooks/auth";
 
-import { CREATE_ROLE, LIST_ROLES } from "../../constants/permissions";
+import { permissions } from "../../constants/permissions";
 
 export const getServerSideProps = withSSRAuth(
   async () => {
@@ -43,7 +43,7 @@ export const getServerSideProps = withSSRAuth(
     };
   },
   {
-    permissions: [LIST_ROLES],
+    permissions: [permissions.roles.list],
   }
 );
 
@@ -52,7 +52,7 @@ const RolesList: NextPage = () => {
 
   const userHasPermissionToCreateRole = validateUserPermissions({
     user,
-    permissions: [CREATE_ROLE],
+    permissions: [permissions.roles.create],
   });
 
   const isWideVersion = useBreakpointValue({ base: false, lg: true });

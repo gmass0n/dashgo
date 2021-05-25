@@ -38,7 +38,7 @@ export async function getUsers(page: number): Promise<GetRolesResponse> {
 }
 
 export async function getRoleByName(name: string): Promise<Role> {
-  const response = await apiClient.get(`/role/${name}`);
+  const response = await apiClient.get(`/roles/${name}`);
 
   return response.data;
 }
